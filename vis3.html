@@ -1,0 +1,218 @@
+<!doctype html>
+<html ng-app="NewsApp">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" href="static/css/style.css">
+
+    <script src="http://www.ourd3js.com/library/multext.js" charset="utf-8"></script>
+
+    <script src="static/js/lib/jquery-latest.min.js"></script>
+    <script src="static/js/lib/d3.min.js" charset="utf-8"></script>
+    <script src="static/js/lib/d3-timeline.js" charset="utf-8"></script>
+    <script src="static/js/lib/angular.js"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>  
+
+    <script type="text/javascript" src="static/js/lib/jszip.min.js"></script>
+
+    <title>NEWS Visualization v 3.0</title>
+
+</head>
+<body ng-controller="MainCtrl" >
+<div id = "Left">
+    <div id = "info"></div>
+    <div id = "map">
+        <span ng-repeat="para in MapContext" >
+            <span id="mpara_{{para.paraNr}}" class="maps" ng-bind-html="para.phrase" style="font-size: 8px ; color: white " ng-click="changePara(para.paraNr)"></span>
+        </span>
+    </div>  
+</div>
+<div id = "Center">
+    <span ng-repeat="para in NewsContext[CNewsNr]" >
+        <span ng-if="para.paraNr == CParaNr" id="para_{{para.paraNr}}" class="focus" ng-bind-html="para.phrase" style="font-size: 24px "></span>
+        <span ng-if="para.paraNr != CParaNr" id="para_{{para.paraNr}}" ng-bind-html="para.phrase" style="font-size: 10px;color:white " ng-click="changePara(para.paraNr)"></span>
+    </span>
+</div>
+<div id = "Right">
+    <div id = "PanelBox">
+            <button ng-click = "initial()"> initialize the data</button>
+            <div>[load]</div>
+            <div>[save]</div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    var keyid =false;
+    var app = angular.module('NewsApp', []);
+
+    app
+    .controller('MainCtrl', function($scope, $http, $sce) {
+//vars begin
+        $scope.NewsNr = -1;
+        $scope.CNewsNr = -1;
+        $scope.CParaNr = -1;
+        $scope.NewsInfo = [];
+        $scope.NewsContext = [];
+        $scope.PNewsNr = -1;
+        $scope.NNewsNr = -1;
+        $scope.NewsKeywords = [];
+        $scope.MapContext = [];
+        var minfontsize = 12;
+//vars end
+
+//selection start
+        $("#Center").mouseup(function(d){
+                var txt;
+                txt = window.getSelection();
+                if(txt.toString().length > 1){
+                    alert(txt);
+                }
+            }
+        );
+//selection end
+
+    $scope.initial = function(){
+        $scope.NewsNr = 2;
+        $scope.CNewsNr = 1;
+        $scope.CParaNr = 0;
+        $scope.PNewsNr = 0;
+        $scope.NNewsNr = 2;
+        $scope.NewsInfo = [
+        {title: "中银交大校友认同卡百廿纪念版发布",date:"2016-3-24"},
+        {title: "助力校运迎接校庆 交大后勤集团举办美食嘉年华活动",date:"2016-3-19"},
+        {title: "上海交大举办第46届校运会献礼百廿校庆", date:"2016-3-19"}
+        //{title: "", date:""}
+        ];
+        $scope.NewsKeywords = [[],[{word:"运动会"},{word:"120周年校庆"}],[]]
+        $scope.NewsContext = [
+            [
+                {phrase:$sce.trustAsHtml("3月23日，中银交大校友认同卡百廿纪念版发布、上海交通大学校友卡合作签约暨2016届毕业生（硕博）班级理事聘任仪式在上海交通大学闵行校区图书信息大楼八楼会议室举行。上海交通大学副校长张安胜与中国银行上海市分行行长赵蓉、副行长杨益民等双方代表及2016届毕业生（硕博）班级理事代表近百人出席。仪式由校友总会办公室副主任桑大伟主持。<br/>"),paraNr:0},
+                {phrase:$sce.trustAsHtml("杨益民代表中国银行向上海交大百廿华诞致以最衷心的祝贺。他表示，上海交大和中国银行共同见证了中华民族的曲折发展历程，有着深厚的历史渊源，相同的责任让中国银行与上海交通大学走到一起，共同为国家的富强、民族的振兴而不懈努力。2006年首发的“交大校友认同卡”是上海高校第一张校友认同卡，它汇聚着交大悠久的历史和光荣的传承，也凝聚着中行对交大美好的祝福和崇高敬意。他指出，在中银交大校友认同卡发卡10周年之际，中国银行特别推出“中银交大校友认同卡百廿纪念版”，是赠与交大120周年校庆的一份生日贺礼。上海交大校友卡的签约仪式，是交大建校120周年校庆系列活动之一，也是中国银行和交大合作的又一里程碑，期望承载百年荣光的交大和中行能够深化合作、再创辉煌。<br/>"),paraNr:1},
+                {phrase:$sce.trustAsHtml("张安胜对中银交大校友认同卡百廿纪念版发布、校友卡合作签约给予高度肯定。他表示，中国银行与上海交通大学作为长期以来的战略伙伴，十多年来，在统一授信、高校助学贷款、校园一卡通和国际结算等方面均有着良好且卓有成效的合作基础，是银行与高校合作的典范，尤其感谢今年中国银行上海分行又为交大全新设计制作校友认同卡“百廿纪念版”。张安胜提出，在中国银行技术和资金支持下，学校还将推出的一项全新的、重要的校友服务平台——校友卡，它是交大校友正式身份的凭证，校友将享受校内外的诸多便利服务，增强全球交大人的认同感与凝聚力。<br/>"),paraNr:2},
+                {phrase:$sce.trustAsHtml("对新获聘的2016届硕博班级理事们，张安胜也提出了殷切期望。他希望所有即将踏入社会的毕业生们能坚持交大人“相互扶持，共同发展”的优良传统，以“交大人”之名凝心聚力，并肩前行，共同谱写母校历史的新篇章，创造更加辉煌的发展成就，推动母校向建设世界一流大学的目标稳步迈进。<br/>"),paraNr:3},
+                {phrase:$sce.trustAsHtml("此次中银交大校友认同卡百廿纪念版发布仪式、合作签约推广上海交通大学校友卡，是正值交大迎接百廿校庆之际，进一步发展了双方的合作关系，拓展了校友服务合作领域，促进双方在人才培养、教学研究、校友服务等领域加强对接，同时也为交大百廿校庆添上了精彩的一笔。<br/>"),paraNr:4}
+                
+
+            ],
+
+            [
+                {phrase:$sce.trustAsHtml("3月19日，上海交通大学第46届<span class = \"keyword\" id = \"key_0\">运动会</span>隆重开幕，同时也拉开了<span class = \"keyword\" id = \"key_1\">120周年校庆</span>系列活动的序幕。随着<span  class = \"keyword\" id = \"key_2\">运动会</span>开幕式上放飞的白鸽，后勤集团为助力校运会、营造120周年校庆氛围而举办的“百年荣光，美食美刻——2016美食嘉年华”活动也于当日上午10时正式开启。<br/>"),paraNr:0},
+                {phrase:$sce.trustAsHtml("虽然已是万物齐吟、南风暖窗的三月时光，此时的校园却还依稀微寒，而第一餐饮大楼外，彩旗招展，美食档位鳞次栉比，人声鼎沸。作为<span class = \"keyword\" id = \"key_3\">活动</span>主要承办单位的饮食管理服务中心组织推出了八方风味、特色成品、串炸烧烤、西式点心、新鲜时蔬、农副产品等二十多个档位的服务。美味炸鸡、山东煎饼、花色面包、正宗川味、西北风味、淮扬风味、新疆风味等特色美食令在场师生目不暇接、大饱口福。最诱人的当属特色小吃——新疆羊肉串，只见串烤师傅娴熟地翻转肉串、撒料，一步步成就美味，让人望眼欲穿、欲罢不能。串炸也是师生们的最爱，炸排骨、炸年糕、炸香蕉、各种油炸食品飘香四溢，让师生们流连忘返。美味特色小吃不仅物美价廉，更是让远离家乡求学的游子们感受浓浓的乡情，同学们脸上洋溢着满意的笑容，手里拿着小吃奔去另一处美食。<br/>"),paraNr:1},
+                {phrase:$sce.trustAsHtml("除了美食档位，新鲜的草莓和生机勃勃的植物也赚足了人气。一颗颗鲜嫩的草莓让人垂涎欲滴、止步踟蹰；校园环境服务中心精心培养的花草芬香扑鼻，一盆盆海棠、仙客来、长寿花、吊兰等盆栽植物万紫千红，喜气洋洋，被喜欢它们的主人“领回”了家。那充满生机的植物，更是让交大的同学们联想到120岁的交大，虽然已是双甲子之约，但历史沉淀赋予她更多的韵味，越发“年轻”。学生“伙管会”的吃吃督查把“食堂更名” <span class = \"keyword\" id = \"key_4\">活动</span>也带到现场，让师生们享受美食之余大开脑洞，为食堂更名献策献力。<br/>"),paraNr:2},
+                {phrase:$sce.trustAsHtml("为了组织好这次<span class = \"keyword\" id = \"key_5\">活动</span>，饮食管理服务中心成立工作小组着手筹划准备，责任到人，专人负责。活动当天，食堂的师傅们凌晨4点就开始工作，到早晨6点多，饮食管理服务中心的办公室人员也早早来到现场，布置环境、分配档位、协调现场，全都有条不紊的逐一落实。动力工程人员早晨到现场装好各个摊位的临时电源；后勤物业人员完成搭棚、拆棚等任务；校园环境服务中心运送桌椅并负责环境清扫。后勤各行各业的协作配合，保证了活动忙而不乱、安全有序地进行。<br/>"),paraNr:3},
+                {phrase:$sce.trustAsHtml("<span class = \"keyword\" id = \"key_6\">活动</span>得到师生们的热情响应和高度评价，参与者接近1万人次。副校长吴旦、党委副书记朱健、副校长张安胜等也先后来到<span class = \"keyword\" id = \"key_7\">活动</span>现场，察看服务摊位，慰问参加服务的后勤职工，了解活动开展情况，并与现场同学亲切交流。看到师生踊跃参与的场面，他们非常高兴，并对此次活动予以充分肯定。<br/> "),paraNr:4},
+                {phrase:$sce.trustAsHtml("后勤集团的负责人表示，举办该<span class = \"keyword\" id = \"key_8\">活动</span>旨在丰富校园饮食文化，提高校运动会师生参与度，探索后勤服务新载体。后勤将紧跟学校发展需要，不断创新后勤服务方式和服务内容，举办更多类似的活动，提升整体服务质量与水平。<br/>"),paraNr:5}
+            ],
+
+            [
+                {phrase:$sce.trustAsHtml("3月19日上午，在120周年校庆倒计时20天之际，上海交大第46届校运会在闵行校区光明体育场开幕。本届校运会以“我爱你交大，I❤SJTU”为主题，历时两天，包括航模表演、特色巡游、开幕式和团体操表演、教职工广播操比赛、群众性体育项目、田径系列比赛以及美食嘉年华等一系列活动。<br/>"),paraNr:0},
+                {phrase:$sce.trustAsHtml("上海市教育工会常务副主席王向群，闵行区江川街道主任王文辉，紫竹国家高新区副书记钱明华，上海闵虹集团有限公司董事长、零号湾董事长冯晓明，吴泾镇文体中心主任蒋国民，120周年校庆校友特使代表王维理；校领导姜斯宪、张杰、郭新立、吴旦、朱健、张安胜、胡近、顾锋，校长助理彭颖红、医学院副院长陈睦以及附属医院院领导、校机关部处、院系、直属单位、附属中小学领导、教师和学生代表等12000余人参加了开幕式。开幕式由党委副书记、校体育运动委员会主任朱健主持。<br/>"),paraNr:1},
+                {phrase:$sce.trustAsHtml("校长张杰致开幕辞。张杰指出，120年来，交大人引领了近代高等学校体育史上的诸多发端，包括史无前例的中国第一届运动会，叱咤风云的南洋足球队，备受追捧的技击运动，美轮美奂的体育馆等。近年来，学校竞技体育功勋显著，校园体育异彩纷呈，体育明星层出不穷，呈现出蓬勃发展的新气象。丰富的体育赛事和体育活动已经成为交大人生活中的一个重要组成部分。张杰表示，从上届开始，学校将教职工运动会和学生运动会合二为一，变成全体交大人的“体育嘉年华”。希望大家在交大这片热土上，尽情享受运动的快乐，用激情和汗水书写交大人的风采，用顽强拼搏为建设世界一流大学凝聚斗志，蓄积力量。<br/>   "),paraNr:2},
+                {phrase:$sce.trustAsHtml("校党委书记姜斯宪宣布上海交通大学第46届运动会开幕。全校千余名学生、二附中和附属实验小学120名学生表演了大型团体操《青春年华》，场面恢宏壮观、震撼人心，给全场带来强大的视觉盛宴。各代表队参加了第九套广播体操展示与比赛。开幕式圆满结束，运动会进入为期两天的正式比赛环节。<br/>"),paraNr:3},
+                {phrase:$sce.trustAsHtml("随着火箭助推无线电遥控滑翔机发射升空，航模表演开始。一架白色超大型纸飞机起飞，纸飞机后面牵引着“我爱你，交大！”横幅，表达出交大学子对学校120岁生日的祝福。随后，一架四旋翼飞行器腾空起飞，除完成了常规的四边航线飞行，还给现场观众带来很大惊喜。航模表演还进行了多机编队飞行。只见四架飞机双机两两编队，依次通过看台。两架飞机同时完成了一个筋斗动作，双机同时做横滚动作，为大型航模表演画上圆满的句号。据悉，交大航模队始建于1944年，是新中国最早的模型组织。2010年在学校与航空航天学院的支持下得以恢复，航模队全体师生设计并制作了总起飞重量0.5kg至20kg的多种固定翼、多旋翼航模，获得多项国内外大奖。<br/>   "),paraNr:4}
+                
+            ]
+
+        ];
+        $scope.MapContext = [
+            {phrase:$sce.trustAsHtml("3月19日，上海交通大学第46届<span class = \"mkeyword\" id = \"mkey_0\"  onclick=\"changeFocus(0)\">运动会</span>隆重开幕，同时也拉开了<span class = \"mkeyword\" id = \"mkey_1\" onclick=\"changeFocus(1)\" >120周年校庆</span>系列活动的序幕。随着<span class = \"mkeyword\" id = \"mkey_2\" onclick=\"changeFocus(2)\">运动会</span>开幕式上放飞的白鸽，后勤集团为助力校运会、营造120周年校庆氛围而举办的“百年荣光，美食美刻——2016美食嘉年华”活动也于当日上午10时正式开启。<br/>"),paraNr:0},
+            {phrase:$sce.trustAsHtml("虽然已是万物齐吟、南风暖窗的三月时光，此时的校园却还依稀微寒，而第一餐饮大楼外，彩旗招展，美食档位鳞次栉比，人声鼎沸。作为<span class = \"mkeyword\" id = \"mkey_3\" onclick=\"changeFocus(3)\">活动</span>主要承办单位的饮食管理服务中心组织推出了八方风味、特色成品、串炸烧烤、西式点心、新鲜时蔬、农副产品等二十多个档位的服务。美味炸鸡、山东煎饼、花色面包、正宗川味、西北风味、淮扬风味、新疆风味等特色美食令在场师生目不暇接、大饱口福。最诱人的当属特色小吃——新疆羊肉串，只见串烤师傅娴熟地翻转肉串、撒料，一步步成就美味，让人望眼欲穿、欲罢不能。串炸也是师生们的最爱，炸排骨、炸年糕、炸香蕉、各种油炸食品飘香四溢，让师生们流连忘返。美味特色小吃不仅物美价廉，更是让远离家乡求学的游子们感受浓浓的乡情，同学们脸上洋溢着满意的笑容，手里拿着小吃奔去另一处美食。<br/>"),paraNr:1},
+            {phrase:$sce.trustAsHtml("除了美食档位，新鲜的草莓和生机勃勃的植物也赚足了人气。一颗颗鲜嫩的草莓让人垂涎欲滴、止步踟蹰；校园环境服务中心精心培养的花草芬香扑鼻，一盆盆海棠、仙客来、长寿花、吊兰等盆栽植物万紫千红，喜气洋洋，被喜欢它们的主人“领回”了家。那充满生机的植物，更是让交大的同学们联想到120岁的交大，虽然已是双甲子之约，但历史沉淀赋予她更多的韵味，越发“年轻”。学生“伙管会”的吃吃督查把“食堂更名” <span class = \"mkeyword\" id = \"mkey_4\" onclick=\"changeFocus(4)\">活动</span>也带到现场，让师生们享受美食之余大开脑洞，为食堂更名献策献力。<br/>"),paraNr:2},
+            {phrase:$sce.trustAsHtml("为了组织好这次<span class = \"mkeyword\" id = \"mkey_5\" onclick=\"changeFocus(5)\">活动</span>，饮食管理服务中心成立工作小组着手筹划准备，责任到人，专人负责。活动当天，食堂的师傅们凌晨4点就开始工作，到早晨6点多，饮食管理服务中心的办公室人员也早早来到现场，布置环境、分配档位、协调现场，全都有条不紊的逐一落实。动力工程人员早晨到现场装好各个摊位的临时电源；后勤物业人员完成搭棚、拆棚等任务；校园环境服务中心运送桌椅并负责环境清扫。后勤各行各业的协作配合，保证了活动忙而不乱、安全有序地进行。<br/>"),paraNr:3},
+            {phrase:$sce.trustAsHtml("<span class = \"mkeyword\" id = \"mkey_6\" onclick=\"changeFocus(6)\">活动</span>得到师生们的热情响应和高度评价，参与者接近1万人次。副校长吴旦、党委副书记朱健、副校长张安胜等也先后来到<span class = \"mkeyword\" id = \"mkey_7\" onclick=\"changeFocus(7)\">活动</span>现场，察看服务摊位，慰问参加服务的后勤职工，了解活动开展情况，并与现场同学亲切交流。看到师生踊跃参与的场面，他们非常高兴，并对此次活动予以充分肯定。<br/> "),paraNr:4},
+            {phrase:$sce.trustAsHtml("后勤集团的负责人表示，举办该<span class = \"mkeyword\" id = \"mkey_8\" onclick =\"changeFocus(8)\">活动</span>旨在丰富校园饮食文化，提高校运动会师生参与度，探索后勤服务新载体。后勤将紧跟学校发展需要，不断创新后勤服务方式和服务内容，举办更多类似的活动，提升整体服务质量与水平。<br/>"),paraNr:5}
+        ];
+        $scope.$apply();
+        $scope.setFontSize();
+        //$scope.fillcontext();
+    }
+    
+    $scope.setFontSize = function(){
+        //$(".keyword").css("font-size","12px");
+        var sizemax = 24;
+        var pnum = $scope.NewsContext[$scope.CNewsNr].length;
+        var p = Math.round(17/pnum);
+        for (var i = 0; i < pnum ; i++){
+            var tempid = "#para_"+i;
+            var obj = $(tempid).css("font-size");
+            console.log(i);
+            console.log(obj);
+            var unit = obj.slice(-2);
+            if (i == $scope.CParaNr){ 
+                $(tempid).css("font-size",sizemax+unit);
+                
+            }
+            else {
+                //var size = (sizemax-Math.abs(i-$scope.CParaNr)*p);
+                var size = 2;
+                $(tempid).css("font-size",size+unit);
+                var tempkey = tempid + ".keyword";
+                $(tempkey).css("font-size","12px");
+            }
+        }
+        //highlighten the keywords
+        //$(".keyword").css("color","red");
+        $(".keyword").css("background-color","red");
+        $(".keyword").css("color","white");
+        $(".mkeyword").css("background-color","red");
+        $(".mkeyword").css("color","red");
+
+    }
+
+    $scope.changePara = function(newFocus){
+        //if(keyid == false){
+            $scope.CParaNr = newFocus;
+            $scope.$apply();
+            $scope.setFontSize();
+            $scope.rollPara(newFocus);
+        /*}
+        else{
+            console.log("aaa");
+            var CParaId = ("#key_"+keyid).parent().attr("id");
+            $scope.CParaNr = Number(CParaId.split("_")[1]);
+            $scope.$apply();
+            $scope.setFontSize();
+            $scope.rollPara(newFocus);
+        }
+        */
+    }
+
+
+    $scope.rollPara = function(newFocus){    // Text View
+                var thisPara = "#para_"+newFocus;
+                var topPos = $("#Center").scrollTop() + $(thisPara).position().top- $("#Center").height()/2 + $(thisPara).height()/2;
+
+                $("#Center").animate({ scrollTop: topPos }, 300);
+    }
+     
+    $scope.splitByLine = function(str,max,fontsize){
+        var curLen = 0;
+        var result = [];
+        var start = 0, end = 0;
+        for(var i=0;i<str.length;i++){
+            var code = str.charCodeAt(i);
+            var pixelLen = code > 255 ? fontsize : fontsize/2;
+            curLen += pixelLen;
+            if(curLen > max){
+                end = i;
+                result.push(str.substring(start,end));
+                start = i;
+                curLen = pixelLen;
+            }
+            if( i === str.length - 1 ){
+                end = i;
+                result.push(str.substring(start,end+1));
+            }
+        }
+        return result;
+    }    
+
+
+
+    }
+    )
+    
+    function changeFocus(id){ keyid = id; }
+</script>
+</html>

@@ -1,0 +1,153 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important; }
+html, body {
+    background-color: #fff;
+    height: 100%;
+    margin: 0; 
+    -webkit-text-size-adjust: none;}
+.divcss5{-webkit-text-size-adjust:none;}
+
+html, body {    }
+
+#Left {
+    position: relative;
+    height:100%;
+    width: 16%; 
+    overflow-y: auto;
+    float: left;
+    border-right: 1px solid #999;
+    box-sizing: border-box;
+    position: relative;}
+#Left #InfoBox{
+    position:relative;
+    height:30%;
+    border:1px solid #999;
+    box-sizing: border-box;
+    padding:10px;}
+#Left #Pre{
+    position:relative;
+    height:70%;
+    border:1px solid #999;
+    overflow-y: auto;
+    box-sizing: border-box;}
+#Left #Pre #PreInfo{
+    overflow: hidden;
+    width: 30%;
+    height: 25px;
+    position: fixed;
+    background-color: #fff;
+    border-bottom: 2px solid #999;
+    border-right :2px solid #999;
+    box-sizing: border-box;
+    z-index: 1;}
+#Left #Pre #PreInfo #pTitle{
+    width: -webkit-calc(100% - 70px);
+    width: -moz-calc(100% - 70px);
+    width: calc(100% -70px);
+    float:left
+    font-size: 1em; }
+#Left #Pre #PreInfo #pDate{
+    position: absolute;
+    width: 70px;
+    right: 0;
+    top: 0;
+    height: 25px;
+    text-align: right;
+    padding:5px 0 0 0;
+    font-size: 0.7em;
+    font-weight: normal;
+    background-color: #fff;
+    color: #333;}
+#Left #Pre #PreCon{
+    padding:40px 5px 5px;
+    overflow-y: auto;}
+#Center {
+    position: relative;
+    height:100%;
+    width: 40%; 
+    float: left;
+    overflow-y: auto;
+    border-right: 1px solid #999;
+    box-sizing: border-box;
+    position: relative;}
+#Center #Focus #FocusInfo{
+    overflow: hidden;
+    width: 48%;
+    height: 25px;
+    position: fixed;
+    background-color: #fff;
+    border-bottom: 2px solid #999;
+    border-right :2px solid #999;
+    box-sizing: border-box;
+    z-index: 1;}
+#Center #Focus #FocusInfo #fTitle{
+    width: -webkit-calc(100% - 70px);
+    width: -moz-calc(100% - 70px);
+    width: calc(100% -70px);
+    float:left
+    font-size: 1em; }
+#Center #Focus #FocusInfo #fDate{
+    position: absolute;
+    width: 70px;
+    right: 0;
+    top: 0;
+    height: 25px;
+    text-align: right;
+    padding:5px 0 0 0;
+    font-size: 0.7em;
+    font-weight: normal;
+    background-color: #fff;
+    color: #333;}
+#Center #Focus #FocusCon{
+    padding:40px 5px 5px;
+    overflow-y: auto;}
+
+#Right {
+    position: relative;
+    height:100%;
+    width: 36%; 
+    float: left;
+    border-right: 1px solid #999;
+    box-sizing: border-box;
+    position: relative;}
+#Right #PanelBox{
+    position:relative;
+    height:30%;
+    border:1px solid #999;
+    box-sizing: border-box;}
+#Right #Nex{
+    position:relative;
+    height:70%;
+    overflow-y: auto;
+    border:1px solid #999;
+    box-sizing: border-box;}
+#Right #Nex #NexInfo {
+    overflow: hidden;
+    width: 30%;
+    height: 25px;
+    position: fixed;
+    background-color: #fff;
+    border-bottom: 2px solid #999;
+    border-right :2px solid #999;
+    box-sizing: border-box;
+    z-index: 1;}
+#Right #Nex #NexInfo #nTitle{
+    width: -webkit-calc(100% - 70px);
+    width: -moz-calc(100% - 70px);
+    width: calc(100% -70px);
+    float:left
+    font-size: 1em; }
+#Right #Nex #NexInfo #nDate{
+    position: absolute;
+    width: 70px;
+    right: 0;
+    top: 0;
+    height: 25px;
+    text-align: right;
+    padding:5px 0 0 0;
+    font-size: 0.7em;
+    font-weight: normal;
+    background-color: #fff;
+    color: #333;}
+#Right #Nex #NexCon{
+    overflow-y: auto;}
